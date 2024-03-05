@@ -12,20 +12,27 @@ import { fetchArticles } from "./article-api";
 
 export const App = () => {
 
+  const[query, setQuery] = useState("")
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(1);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  useEffect(() => async function getData() {
+useEffect (() => {
+  if(query === ""){
+    return 
+  }
+
+  async function getData(){
     try {
-      setIsLoading(true)
-      setArticles([]);
-      setError(false)
-    
-      const data = await fetchArticles(newQuery);
-      setArticles(data);
+     setIsLoading(true)
+     setError(false)
+
+      const data = await fetchArticles(query, page);
+      setArticles(prevArticles => {
+        return [...prevArticles, ...data]
+      });
     
     } catch(e){
       setError(true)
@@ -34,18 +41,21 @@ export const App = () => {
       setIsLoading(false)
     
     }
-  
+
+  }
   getData()
-  }, [])
+}, [page, query])
 
+ const handleSearch = async (newQuery) => {
+  setQuery(newQuery)
+  setPage(1)
+  setArticles([])
+  }
 
-  const handleSearch = async (newQuery) => {
+  const handleLoadMore = () => {
+    setPage(page + 1)
+  }
 
-  setIsLoading(true)
-  setError(false)
-  setArticles([]);
-
-}
 
 
   return (
@@ -56,6 +66,9 @@ export const App = () => {
   {isLoading && <b> Loading now !</b>}
   {articles.length > 0 && <ArticleList items={articles}/>}
   {error && <b> Oops! Error! Reload! </b>}
+
+  {articles.length > 0 && !isLoading && <button onClick={handleLoadMore}>Load more</button>}
+
   
     </div>
   );
