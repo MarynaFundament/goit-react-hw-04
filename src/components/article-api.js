@@ -13,7 +13,7 @@ export const fetchArticles = async (searchQuery, page) => {
     },
   });
 
-    // console.log(response.data.results)
+    console.log(response.data.results)
 
     return response.data.results
 

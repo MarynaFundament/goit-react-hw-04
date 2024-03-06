@@ -34,6 +34,14 @@ async function getData(){
      setError(false)
 
       const data = await fetchArticles(query, page);
+
+      if (data.length === 0) {
+        toast.error('Sorry, there are no images matching your search query. Please try again', { position: 'top-right' });
+        return;
+      }
+
+      console.log(data)
+  
       setArticles(prevArticles => {
         return [...prevArticles, ...data]
       });

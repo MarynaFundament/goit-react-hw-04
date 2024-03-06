@@ -1,14 +1,10 @@
 import { Field, Form, Formik, ErrorMessage} from "formik";
-import * as Yup from 'yup';
 import toast, { Toaster } from 'react-hot-toast';
+
+
 
 import styles from "../SearchBar/SearchBar.module.css"
 
-const UserSchema = Yup.object().shape({
-  query: Yup.string()
-    .min(1, "Use minimum 2 symbols")
-    .required("Data is required"),
-});
 
 
 const SearchBar = ({ onQuery }) => {
@@ -16,11 +12,13 @@ const SearchBar = ({ onQuery }) => {
 
   const handleSubmit = (e, { resetForm }) => {
 
-  if (e.query === '') {
-      toast.info('Please, enter search word!');
-      return;
+  if (e.query === "") {
+
+    toast.error('Please, fill the main field', { position: 'top-right' });
+    return;
     }
 
+  console.log(e)
     onQuery(e.query);
     resetForm () ;
   };
@@ -30,8 +28,7 @@ const SearchBar = ({ onQuery }) => {
 
           <Formik 
 
-          initialValues = {{query: " "}}
-          validationSchema = {UserSchema}
+          initialValues = {{query:""}}
           onSubmit = {handleSubmit}
           >
 
@@ -46,15 +43,10 @@ const SearchBar = ({ onQuery }) => {
             placeholder="Search images and photos"
             name = "query"
             
-            // onChange={(e) => onChange(e.target.value)}
       
           />
           <button  className={styles.buttonSearch} type="submit">Search</button>
-          <ErrorMessage name="query" component="div" />
-
-          
-          <Toaster />
-  
+      
 
           </Form>
         </Formik>
