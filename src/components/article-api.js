@@ -8,12 +8,12 @@ export const fetchArticles = async (searchQuery, page) => {
     },
     params: {
       query: searchQuery,
-      per_page: 2,
+      per_page: 18,
       page,
     },
   });
 
-    console.log(response.data.results)
+    // console.log(response.data.results)
 
     return response.data.results
 

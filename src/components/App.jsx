@@ -1,18 +1,19 @@
 import toast, { Toaster } from 'react-hot-toast';
 
 import SearchBar from "./SearchBar/SearchBar";
-// import Error from './ErrorMessage/ErrorMessage';
+import Error from './ErrorMessage/ErrorMessage';
+import LoadMoreBtn from './LoadMoreBtn/LoadMoreBtn';
 import ImageGallery from "./ImageGallery/ImageGallery"
-
-import ArticleList from "./ArticleList/ArticleList";
+import Loader from './Loader/Loader';
 
 import { useState, useEffect } from "react";
 import { fetchArticles } from "./article-api";
+import styles from "./ImageGallery/ImageGallery.module.css"
 
 
 export const App = () => {
 
-  const[query, setQuery] = useState("")
+  const [query, setQuery] = useState("")
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(1);
 
@@ -20,11 +21,14 @@ export const App = () => {
   const [error, setError] = useState(false);
 
 useEffect (() => {
+
   if(query === ""){
+   
     return 
   }
 
-  async function getData(){
+async function getData(){
+  
     try {
      setIsLoading(true)
      setError(false)
@@ -62,13 +66,15 @@ useEffect (() => {
     <div>
 
   <SearchBar onQuery={handleSearch} />
+
+  {isLoading && <Loader/>}
   
-  {isLoading && <b> Loading now !</b>}
-  {articles.length > 0 && <ArticleList items={articles}/>}
-  {error && <b> Oops! Error! Reload! </b>}
-
-  {articles.length > 0 && !isLoading && <button onClick={handleLoadMore}>Load more</button>}
-
+<div className={styles.layout}>
+  {articles.length > 0 && <ImageGallery items={articles} />}
+  {articles.length > 0 && !isLoading && <LoadMoreBtn onClick={handleLoadMore}/>}
+</div>
+  {error && <Error />}
+  <Toaster/>
   
     </div>
   );

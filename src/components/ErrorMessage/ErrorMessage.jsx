@@ -1,8 +1,7 @@
-// export const Error = () => {
-//     return (
-        
-//     )
+export const Error = () => {
+    return <p>
+        <b> Oops! Error! Reload! </b>
+    </p>
+}
 
-// }
-
-// export default Error
+export default Error
